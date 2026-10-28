@@ -1,0 +1,8 @@
+import { useState } from 'react';
+import type { CartItem,Product } from '../types';
+import { Modal } from './Modal';
+import { money,unitPrice } from '../utils/order';
+export function Customize({product:p,onClose,onAdd}:{product:Product;onClose:()=>void;onAdd:(p:Product,s:CartItem['selections'],notes:string)=>void}){
+ const [selections,setSelections]=useState<CartItem['selections']>({});const [notes,setNotes]=useState('');
+ return <Modal title="Do seu jeito" onClose={onClose}><img className="custom-photo" src={p.image} alt={`Imagem ilustrativa de ${p.name}`}/><div className="modal-body"><h3 className="display-small">{p.name}</h3><p className="muted">{p.description}</p><p className="prototype-note">Opções e preços demonstrativos Base: {money(p.price)}</p><form onSubmit={e=>{e.preventDefault();onAdd(p,selections,notes);onClose();}}>{p.options?.map(g=><fieldset key={g.id}><legend>{g.name} <small>{g.required?'Escolha uma opção':'Opcional'}</small></legend>{g.choices.map(c=><label className="choice" key={c.id}><span><input type={g.multiple?'checkbox':'radio'} name={g.id} required={g.required} checked={selections[g.id]?.includes(c.id)??false} onChange={e=>setSelections(old=>({...old,[g.id]:g.multiple?(e.target.checked?[...(old[g.id]??[]),c.id]:(old[g.id]??[]).filter(id=>id!==c.id)):[c.id]}))}/>{c.label}</span><span>{c.price>0?`+ ${money(c.price)}`:'Incluído'}</span></label>)}</fieldset>)}<label className="field">Alguma observação?<textarea maxLength={400} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Ex.: servir o leite à parte"/></label><button className="button primary full" type="submit">Adicionar ao pedido <span>{money(unitPrice(p,selections))}</span></button></form></div></Modal>;
+}

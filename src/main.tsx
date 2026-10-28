@@ -1,0 +1,12 @@
+import React,{lazy,Suspense} from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import {cafe} from './data/config';
+import './styles.css';
+import {backendConfigured} from './lib/backend';
+import {replaceCatalog} from './data/products';
+document.title=/^\/admin(?:\/|$)/.test(window.location.pathname)?'Painel administrativo':cafe.name+' — Uma pausa com sabor';
+document.querySelector('meta[name="description"]')?.setAttribute('content',cafe.description);
+const Admin=lazy(()=>import('./admin/AdminApp'));
+if(backendConfigured)replaceCatalog([],[]);
+createRoot(document.getElementById('root')!).render(<React.StrictMode>{/^\/admin(?:\/|$)/.test(window.location.pathname)?<Suspense fallback={<p role="status">Carregando administração…</p>}><Admin/></Suspense>:<App/>}</React.StrictMode>);

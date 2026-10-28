@@ -1,0 +1,39 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Cache
+.npm-cache/
+.vite/
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Supabase
+supabase/.temp/
+
+# Arquivos locais
+backups/
+.verification/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Testes
+coverage/
+
+# Editores e sistema
+.DS_Store
+Thumbs.db
+
+# Plataformas de deploy
+.vercel/
+.netlify/
